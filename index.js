@@ -12,6 +12,9 @@ const app = express();
 //cors
 app.use(cors());
 
+// public
+app.use(express.static('public'));
+
 //parse body
 app.use(express.json())
 
