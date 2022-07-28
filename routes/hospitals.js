@@ -19,7 +19,10 @@ router.post('/',
 );
 
 router.put('/:id', 
-  [], 
+  [
+    check('name', 'name of hospital is required').not().isEmpty(),
+    validateParams
+  ], 
   putHospitals
 );
 

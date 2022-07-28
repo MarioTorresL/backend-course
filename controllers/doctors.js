@@ -26,8 +26,8 @@ const postDoctors = async (req, res=response) =>{
     const uid = req.uid;
 
     const doctor = new Doctor({
-      user: uid,
-      ...req.body
+      ...req.body,
+      user: uid
     })
 
     const dbDoctor = await doctor.save();
@@ -41,7 +41,24 @@ const postDoctors = async (req, res=response) =>{
 
 const putDoctors = async (req, res=response) =>{
   try{
-    return res.status(200).send('put Doctors Work!');
+    const id = req.params.id;
+    const uid = req.uid;
+
+    const doctor = await Doctor.findById(id);
+
+    if(!doctor){
+      return res.status(404).send('Doctor not found')
+    }
+
+    const updateDoctor = {
+      ...req.body,
+      user:uid
+    }
+
+    const saveDoctor = await Doctor.findByIdAndUpdate(id, updateDoctor, {new:true})
+    
+    return res.status(200).send(saveDoctor);
+  
   }catch(error){
     return res.status(400).send(error);
   }
@@ -49,7 +66,17 @@ const putDoctors = async (req, res=response) =>{
 
 const deleteDoctors = async (req, res=response) =>{
   try{
-    return res.status(200).send('delete Doctors Work!');
+    const id = req.params.id;
+
+    const doctor = await Doctor.findById(id);
+
+    if(!doctor){
+      return res.send('Doctor not found')
+    }
+    await Doctor.findByIdAndDelete(id)
+
+    return res.status(200).send('delete Doctor Correctly');
+
   }catch(error){
     return res.status(400).send(error);
   }

@@ -18,7 +18,13 @@ router.post('/',
   postDoctors
 );
 
-router.put('/:id', putDoctors);
+router.put('/:id',
+  [
+    check('name', 'name of DOctor is required').not().isEmpty(),
+    check('hospital'),
+    validateParams
+  ],
+  putDoctors);
 
 router.delete('/:id', validateJwt, deleteDoctors);
 

@@ -36,16 +36,42 @@ const postHospitals = async (req, res=response) =>{
 }
 const putHospitals = async (req, res=response) =>{
   try{
-    return res.send('pUT Hospitals')
+
+    const id = req.params.id;
+    const hospital = await Hospital.findById(id)
+
+    if(!hospital){
+      return res.status(404).send('Hospital not found');
+    }
+
+    const updateHospital = {
+      ...req.body,
+      user:req.uid
+    }
+
+    const saveHospital = await Hospital.findByIdAndUpdate(id, updateHospital, {new:true})
+
+    return res.status(200).send(saveHospital)
   }catch(error){
     
   }
 }
 const deleteHospitals = async (req, res=response) =>{
   try{
-    return res.send('Delete Hospitals')
+
+    const id = req.params.id;
+
+    const hospital = await Hospital.findById(id);
+
+    if(!hospital){
+      return res.send('Hospital not found');
+    }
+
+    await Hospital.findByIdAndDelete(id)
+
+    return res.send('Delete Hospital Correctly')
   }catch(error){
-    
+    return res.status(500).send(error)
   }
 }
 
