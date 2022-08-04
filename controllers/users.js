@@ -9,7 +9,7 @@ const getUsers = async (req, res) =>{
   try{
     const desde = Number(req.query.desde) || 0; //query params
 
-    const users = await User.find({}, 'name email img role').skip(desde).limit(5);
+    const users = await User.find({}, 'name email img role, google ').skip(desde).limit(5);
 
     const total = await User.count();
 

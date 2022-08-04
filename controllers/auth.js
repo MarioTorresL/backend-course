@@ -70,8 +70,11 @@ const renewToken = async(req, res=response)=>{
   try{
     const uid = req.uid
     // generate token
+    const user = await User.findById(uid)
+
     const token = await generateJWT(uid)
-    return res.send({token})
+
+    return res.send({token, user})
   }catch(e){
     return res.status(500).send(e)
   }
