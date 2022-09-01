@@ -75,7 +75,7 @@ const deleteDoctors = async (req, res=response) =>{
     }
     await Doctor.findByIdAndDelete(id)
 
-    return res.status(200).send('delete Doctor Correctly');
+    return res.status(200).json({message:'delete Doctor Correctly'});
 
   }catch(error){
     return res.status(400).send(error);

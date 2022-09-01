@@ -9,7 +9,7 @@ const getUsers = async (req, res) =>{
   try{
     const desde = Number(req.query.desde) || 0; //query params
 
-    const users = await User.find({}, 'name email img role, google ').skip(desde).limit(5);
+    const users = await User.find({}, 'name email img role google ').skip(desde).limit(5);
 
     const total = await User.count();
 
@@ -24,7 +24,7 @@ const getUsers = async (req, res) =>{
 
 const postUsers = async (req, res = response) =>{
 
-  const { email, password, name} = req.body;
+  const { email, password } = req.body;
 
   try{
 
@@ -87,7 +87,7 @@ const deleteUser = async(req, res=response)=>{
 
     await User.findByIdAndDelete(uid);
 
-    return res.send('User Delete')
+    return res.json({message:'User Delete'})
   }catch(e){
     res.status(500).send(e);
   }
