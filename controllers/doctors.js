@@ -1,4 +1,5 @@
 const { response } = require('express');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const Doctor = require('../models/doctor');
 
@@ -17,6 +18,23 @@ const getDoctors = async (req, res=response) =>{
 
   }catch(error){
     return res.send(error);
+  }
+};
+
+const getOneDoctor = async (req, res=response) =>{
+  try{
+    const id = req.params.id;
+    const doctor = await Doctor.findById(id)
+    .populate('user','name')
+    .populate('hospital', 'name')
+    if(!doctor){
+      return res.status(404).send('Doctor not found')
+    }
+
+    return res.status(200).send(doctor);
+
+  }catch(error){
+    return res.status(500).send(error);
   }
 };
 
@@ -87,5 +105,6 @@ module.exports = {
   getDoctors,
   postDoctors,
   putDoctors,
-  deleteDoctors
+  deleteDoctors,
+  getOneDoctor
 };
