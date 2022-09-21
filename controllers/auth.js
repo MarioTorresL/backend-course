@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 const { generateJWT } = require('../helpers/jwt');
-const { googleVerify } = require('../helpers/google-verify')
+const { googleVerify } = require('../helpers/google-verify');
+const {getMenuDashboard} = require('../helpers/menu-dashboard');
 
 const login = async (req, res)=>{
   const {email, password} = req.body;
@@ -24,7 +25,11 @@ const login = async (req, res)=>{
     // genrateToken
     const token = await generateJWT(user.id);
 
-    res.json({token:token})
+    res.json({
+      ok:true,
+      token:token,
+      menu:getMenuDashboard(user.role)
+    })
 
   }catch(e){
     return res.status(500).send(e)
@@ -60,7 +65,11 @@ const googleSignIn = async (req, res=response) =>{
     const token = await generateJWT(user.id);
 
 
-    return res.send({email, name, picture, token})
+    return res.json({
+      ok:true,
+      token,
+      menu: getMenuDashboard(user.role)
+    })
   }catch(e){
     return res.status(400).send(e)
   }
@@ -74,7 +83,11 @@ const renewToken = async(req, res=response)=>{
 
     const token = await generateJWT(uid)
 
-    return res.send({token, user})
+    return res.json({
+      token, 
+      user,
+      menu:getMenuDashboard(user.role)
+    })
   }catch(e){
     return res.status(500).send(e)
   }
